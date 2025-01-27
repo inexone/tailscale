@@ -1,17 +1,22 @@
 services:
-  - type: worker
-    name: render-subnet-router
-    env: docker
-    autoDeploy: false
-    envVars:
-      - key: TAILSCALE_AUTHKEY
-        sync: false
-      - key: TAILSCALE_VERSION
-        value: 1.64.0
-      - key: ADVERTISE_ROUTES
-        value: 10.0.0.0/8
-    disk:
-      name: tailscale-state
-      mountPath: /var/lib/tailscale
-      sizeGB: 1
-
+- type: worker
+  name: render-subnet-router
+  runtime: docker
+  repo: https://github.com/inexone/tailscale
+  plan: starter
+  envVars:
+  - key: TAILSCALE_VERSION
+    value: 1.78.3
+  - key: TAILSCALE_AUTHKEY
+    sync: false
+  - key: ADVERTISE_ROUTES
+    value: 10.0.0.0/8
+  region: frankfurt
+  dockerContext: .
+  dockerfilePath: ./Dockerfile
+  disk:
+    name: tailscale-state
+    mountPath: /var/lib/tailscale
+    sizeGB: 1
+  autoDeploy: false
+version: "1"
